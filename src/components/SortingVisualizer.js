@@ -1,27 +1,56 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { getMergeSortAnimations } from '../SortingAlgorithms/sortingAlgorithm'
 
+const ANIMATION_SPEED_MS = 1;
+const NUMBER_OF_ARRAY_BARS = 310;
+const PRIMARY_COLOR = '#007CD2';
+const SECONDARY_COLOR = 'red';
 
 const SortingVisualizer = () => {
-    const[numbers, setNumbers] = useState([])
+    const[array, setArray] = useState([])
 
     useEffect(()=>{
         resetArray()
     }, [])
 
     const resetArray =() =>{
-        const array = []
-        for(let i=0; i<150; i++){
-            array.push(randomIntFromInterval(5,730))
+        const newArray = []
+        for(let i = 0; i < NUMBER_OF_ARRAY_BARS; i++){
+            newArray.push(randomIntFromInterval(5,730))
         }
-        setNumbers(array)
+        setArray(newArray);
     }
+
+    const mergeSort = () => {
+        const animations = getMergeSortAnimations(array);
+        for(let i = 0; i < animations.length; i++){
+            const arrayBars = document.getElementsByClassName("bar");
+            const isColorChange = i % 3 !==2;
+            if(isColorChange){
+                const[barOneIdx, barTwoIdx] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                }, i * ANIMATION_SPEED_MS)
+            }else{
+                setTimeout(() => {
+                    const [barOneIdx, newHeight] = animations[i];
+                    const barOneStyle = arrayBars[barOneIdx].style;
+                    barOneStyle.height=`${newHeight}px`;
+                }, i * ANIMATION_SPEED_MS)
+            }
+        }
+    }
+
     function randomIntFromInterval(min, max) {
-        // min and max included
         return Math.floor(Math.random() * (max - min + 1) + min);
       }
     
-    const mergeSort = () => {}
+
     const quickSort = () => {}
     const heapSort = () => {}
     const bubbleSort = () => {}
@@ -32,15 +61,18 @@ const SortingVisualizer = () => {
             <h1>Sorting Visualizer</h1>
             <Buttons>
                 <ResetButton onClick={resetArray}>New</ResetButton>
-                <MergeSort>Merge Sort</MergeSort>
+                <MergeSort onClick={mergeSort}>Merge Sort</MergeSort>
                 <QuickSort>Quick Sort</QuickSort>
                 <HeapSort>Heap Sort</HeapSort>
                 <BubbleSort>Bubble Sort</BubbleSort>
             </Buttons>
         </Header>
         <Content>
-            {numbers.map((value,idx) => (
-            <Bars style={{height:`${value}px`}}key={idx}/>
+            {array.map((value,idx) => (
+            <div className='bar'
+             style={{ 
+                height:`${value}px`
+            }}key={idx}></div>
             ))}
         </Content>
     </Container>
@@ -93,11 +125,13 @@ const BubbleSort=styled(ResetButton)`
 const Content = styled.div`
     display:flex;
     justify-content:center;
-`
-const Bars = styled.div`
-    width:5px;
-    margin: 0 1px;
-    background:#007CD2;
+    margin:0px 100px;
+
+    .bar{
+        width:5px;
+        margin: 0 1px;
+        background-color:#007CD2;
+    }
 `
 
 
