@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { getMergeSortAnimations } from '../SortingAlgorithms/sortingAlgorithm'
 
 const ANIMATION_SPEED_MS = 1;
-const NUMBER_OF_ARRAY_BARS = 310;
+const NUMBER_OF_ARRAY_BARS = 200;
 const PRIMARY_COLOR = '#007CD2';
 const SECONDARY_COLOR = 'red';
 
@@ -62,9 +62,9 @@ const SortingVisualizer = () => {
             <Buttons>
                 <ResetButton onClick={resetArray}>New</ResetButton>
                 <MergeSort onClick={mergeSort}>Merge Sort</MergeSort>
-                <QuickSort>Quick Sort</QuickSort>
+                {/* <QuickSort>Quick Sort</QuickSort>
                 <HeapSort>Heap Sort</HeapSort>
-                <BubbleSort>Bubble Sort</BubbleSort>
+                <BubbleSort>Bubble Sort</BubbleSort> */}
             </Buttons>
         </Header>
         <Content>
@@ -101,24 +101,31 @@ const Buttons=styled.div`
     gap: 10px;
     margin:10px auto;
 `
-const ResetButton=styled.button`
-        padding: 10px 20px;
-        border-radius: 6px;
-        border:1px solid #fff;
+
+const MergeSort=styled.button`
+    padding: 10px 20px;
+    border-radius: 6px;
+    border:2px solid #80669d;
+    background:transparent;
+    color:#a881af;
+    font-weight:bold;
+    cursor:pointer;
+`
+const ResetButton=styled(MergeSort)`
+        border:2px solid #5dbea3;
         background:transparent;
-        color:#fff;
+        color:#5dbea3;
         cursor:pointer;
+        padding:0px 40px;
+        margin-right:30px;
 `
-const MergeSort=styled(ResetButton)`
+const QuickSort=styled(MergeSort)`
 
 `
-const QuickSort=styled(ResetButton)`
+const HeapSort=styled(MergeSort)`
 
 `
-const HeapSort=styled(ResetButton)`
-
-`
-const BubbleSort=styled(ResetButton)`
+const BubbleSort=styled(MergeSort)`
 
 `
 
